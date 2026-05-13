@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        /*
+         * Shared visual design — this CSS block is identical in v1 and v2.
+         * Changing the DOM identifiers (IDs, classes, names) while keeping
+         * the CSS the same is exactly what makes v2 look identical but break tests.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 40px 36px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            width: 380px;
+        }
+
+        .login-card h1 {
+            font-size: 22px;
+            margin-bottom: 28px;
+            color: #1a1a2e;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 11px;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover { background: #357abd; }
+
+        .error-msg {
+            color: #c0392b;
+            font-size: 13px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .version-badge {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Sign In</h1>
+
+        {% if error %}
+        <p class="error-msg" id="error-message">{{ error }}</p>
+        {% endif %}
+
+        <!--
+            VERSION 1 — Stable DOM.
+
+            These are the selectors the Selenium tests target in "normal" mode:
+              By.ID "email"       → email input
+              By.ID "password"    → password input
+              By.ID "remember"    → remember-me checkbox
+              By.ID "login-btn"   → submit button
+
+            When the test runs on v2, these IDs no longer exist — NoSuchElementException
+            is raised, and the self-healing fallback takes over.
+        -->
+        <form id="login-form" method="POST" action="">
+
+            <label for="email">Email</label>
+            <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-input"
+                placeholder="Enter your email"
+                autocomplete="off"
+            />
+
+            <label for="password">Password</label>
+            <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input"
+                placeholder="Enter your password"
+            />
+
+            <div class="remember-row">
+                <input
+                    type="checkbox"
+                    id="remember"
+                    name="remember"
+                    class="checkbox"
+                />
+                <label for="remember" style="margin-bottom:0">Remember me</label>
+            </div>
+
+            <button type="submit" id="login-btn" class="btn-primary">
+                Log In
+            </button>
+
+        </form>
+
+        <p class="version-badge">v1 — stable DOM</p>
+    </div>
+</body>
+</html>

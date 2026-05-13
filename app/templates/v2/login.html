@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        /*
+         * CSS is intentionally IDENTICAL to v1 — the page renders the same visually.
+         * A human looking at both pages in a browser cannot tell them apart.
+         * Only the HTML element IDs, names, and classes have changed.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-card {
+            background: #ffffff;
+            padding: 40px 36px;
+            border-radius: 8px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+            width: 380px;
+        }
+
+        .login-card h1 {
+            font-size: 22px;
+            margin-bottom: 28px;
+            color: #1a1a2e;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .input-control {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 18px;
+        }
+
+        .input-control:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .remember-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .toggle-input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .action-btn {
+            width: 100%;
+            padding: 11px;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .action-btn:hover { background: #357abd; }
+
+        .error-msg {
+            color: #c0392b;
+            font-size: 13px;
+            margin-bottom: 14px;
+            text-align: center;
+        }
+
+        .version-badge {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: #bbb;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Sign In</h1>
+
+        {% if error %}
+        <p class="error-msg" id="validation-error">{{ error }}</p>
+        {% endif %}
+
+        <!--
+            VERSION 2 — Refactored DOM.
+
+            A developer renamed every identifier — same design, broken selectors.
+            Mapping from v1 → v2 (this is what the self-healing system must bridge):
+
+              id="email"         →  id="usr-email-field"
+              id="password"      →  id="usr-pwd-field"
+              id="remember"      →  id="remember-toggle"
+              id="login-btn"     →  id="submit-action"
+
+              class="form-input" →  class="input-control"
+              class="checkbox"   →  class="toggle-input"
+              class="btn-primary"→  class="action-btn"
+
+            When Selenium tries By.ID "login-btn" here, it gets NoSuchElementException.
+            The self-healing driver catches that and uses OpenCV to find the button
+            by matching its visual appearance from the saved template screenshot.
+        -->
+        <form id="auth-form" method="POST" action="">
+
+            <label for="usr-email-field">Email</label>
+            <input
+                type="email"
+                id="usr-email-field"
+                name="usr-email-field"
+                class="input-control"
+                placeholder="Enter your email"
+                autocomplete="off"
+            />
+
+            <label for="usr-pwd-field">Password</label>
+            <input
+                type="password"
+                id="usr-pwd-field"
+                name="usr-pwd-field"
+                class="input-control"
+                placeholder="Enter your password"
+            />
+
+            <div class="remember-row">
+                <input
+                    type="checkbox"
+                    id="remember-toggle"
+                    name="remember"
+                    class="toggle-input"
+                />
+                <label for="remember-toggle" style="margin-bottom:0">Remember me</label>
+            </div>
+
+            <button type="submit" id="submit-action" class="action-btn">
+                Log In
+            </button>
+
+        </form>
+
+        <p class="version-badge">v2 — refactored DOM</p>
+    </div>
+</body>
+</html>

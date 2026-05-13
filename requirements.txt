@@ -1,0 +1,19 @@
+# Web application
+flask>=3.0.0
+
+# Browser automation
+selenium>=4.18.0
+
+# YOLOv8 — object detection for visual element recovery
+ultralytics>=8.0.0
+
+# Image processing (used by ultralytics internally)
+opencv-python>=4.9.0
+numpy>=1.26.0
+
+# Test framework
+pytest>=8.0.0
+pytest-html>=4.1.0
+
+# ChromeDriver auto-management
+webdriver-manager>=4.0.0

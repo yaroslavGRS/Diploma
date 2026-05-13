@@ -1,0 +1,7 @@
+venv/
+__pycache__/
+*.pyc
+*.pyo
+dataset.zip
+.claude/
+CLAUDE_CODE_CONTEXT.md
