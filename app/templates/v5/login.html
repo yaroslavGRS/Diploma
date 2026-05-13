@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        /*
+         * СЦЕНАРІЙ 5 — Комбінована мутація.
+         * Одночасно змінено: ID, класи, атрибут name, текст кнопки.
+         * Найскладніший сценарій — максимальна кількість змін в DOM.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .auth-card { background: #ffffff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .auth-card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .input-field { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .input-field:focus { outline: none; border-color: #4a90e2; }
+        .toggle-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 13px; color: #555; }
+        .toggle-box { width: 16px; height: 16px; cursor: pointer; }
+        .primary-action { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .primary-action:hover { background: #357abd; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="auth-card">
+        <h1>Sign In</h1>
+
+        <!--
+            СЦЕНАРІЙ 5: Комбінована мутація — ID + класи + name + текст кнопки.
+            Найповніша симуляція реального рефакторингу.
+            v1 → v5:
+              id="email"       → id="auth-email-input"
+              id="password"    → id="auth-pwd-input"
+              id="login-btn"   → id="auth-submit"
+              name="email"     → name="auth_email"
+              name="password"  → name="auth_pwd"
+              "Log In"         → "Sign In" (текст кнопки змінено)
+        -->
+        <form id="auth-form" method="POST" action="">
+            <label for="auth-email-input">Email</label>
+            <input type="email" id="auth-email-input" name="auth_email" class="input-field" placeholder="Enter your email" autocomplete="off" />
+
+            <label for="auth-pwd-input">Password</label>
+            <input type="password" id="auth-pwd-input" name="auth_pwd" class="input-field" placeholder="Enter your password" />
+
+            <div class="toggle-row">
+                <input type="checkbox" id="auth-remember" name="remember" class="toggle-box" />
+                <label for="auth-remember" style="margin-bottom:0">Remember me</label>
+            </div>
+
+            <button type="submit" id="auth-submit" class="primary-action">Sign In</button>
+        </form>
+
+        <p class="version-badge">v5 — combined mutation</p>
+    </div>
+</body>
+</html>

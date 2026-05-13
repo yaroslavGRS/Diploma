@@ -1,19 +1,19 @@
 """
-Flask web application — the "system under test" for the self-healing framework.
+Flask web application — система під тестом для self-healing фреймворку.
 
-Serves two visually identical login pages:
-  /v1/login  — stable DOM with clean IDs/classes (original state)
-  /v2/login  — same look, but all DOM identifiers renamed (simulates a refactor)
-
-Running: python app/app.py  →  http://localhost:5000
+Маршрути:
+  /v1/login — стабільний DOM (еталонна сторінка)
+  /v2/login — перейменовані ID
+  /v3/login — перейменовані ID та CSS-класи
+  /v4/login — додаткові wrapper-div навколо елементів
+  /v5/login — комбінована мутація (ID + класи + name + текст кнопки)
 """
 
 from flask import Flask, render_template, request, redirect, url_for
 
 app = Flask(__name__)
 
-# Demo credentials — hardcoded test fixture, not a real auth system
-DEMO_EMAIL = "admin@test.com"
+DEMO_EMAIL    = "admin@test.com"
 DEMO_PASSWORD = "password123"
 
 
@@ -24,29 +24,62 @@ def index():
 
 @app.route("/v1/login", methods=["GET", "POST"])
 def login_v1():
-    """Version 1: stable DOM — tests can find elements by their well-known IDs."""
+    """v1 — стабільний DOM, стандартні ID."""
     error = None
     if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
-        if email == DEMO_EMAIL and password == DEMO_PASSWORD:
+        if request.form.get("email") == DEMO_EMAIL and \
+           request.form.get("password") == DEMO_PASSWORD:
             return redirect(url_for("success", version="v1"))
-        error = "Invalid credentials. Please try again."
+        error = "Invalid credentials."
     return render_template("v1/login.html", error=error)
 
 
 @app.route("/v2/login", methods=["GET", "POST"])
 def login_v2():
-    """Version 2: refactored DOM — the same form fields now have different names/IDs."""
+    """v2 — перейменовані ID."""
     error = None
     if request.method == "POST":
-        # Field names changed as part of the simulated refactor
-        email = request.form.get("usr-email-field")
-        password = request.form.get("usr-pwd-field")
-        if email == DEMO_EMAIL and password == DEMO_PASSWORD:
+        if request.form.get("usr-email-field") == DEMO_EMAIL and \
+           request.form.get("usr-pwd-field") == DEMO_PASSWORD:
             return redirect(url_for("success", version="v2"))
-        error = "Invalid credentials. Please try again."
+        error = "Invalid credentials."
     return render_template("v2/login.html", error=error)
+
+
+@app.route("/v3/login", methods=["GET", "POST"])
+def login_v3():
+    """v3 — перейменовані ID та CSS-класи."""
+    error = None
+    if request.method == "POST":
+        if request.form.get("user-email") == DEMO_EMAIL and \
+           request.form.get("user-password") == DEMO_PASSWORD:
+            return redirect(url_for("success", version="v3"))
+        error = "Invalid credentials."
+    return render_template("v3/login.html", error=error)
+
+
+@app.route("/v4/login", methods=["GET", "POST"])
+def login_v4():
+    """v4 — елементи обгорнуті в додаткові div."""
+    error = None
+    if request.method == "POST":
+        if request.form.get("wrap-email") == DEMO_EMAIL and \
+           request.form.get("wrap-password") == DEMO_PASSWORD:
+            return redirect(url_for("success", version="v4"))
+        error = "Invalid credentials."
+    return render_template("v4/login.html", error=error)
+
+
+@app.route("/v5/login", methods=["GET", "POST"])
+def login_v5():
+    """v5 — комбінована мутація: ID + класи + name + текст кнопки."""
+    error = None
+    if request.method == "POST":
+        if request.form.get("auth_email") == DEMO_EMAIL and \
+           request.form.get("auth_pwd") == DEMO_PASSWORD:
+            return redirect(url_for("success", version="v5"))
+        error = "Invalid credentials."
+    return render_template("v5/login.html", error=error)
 
 
 @app.route("/success")

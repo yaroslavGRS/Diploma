@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        /*
+         * СЦЕНАРІЙ 3 — Мутація CSS-класів.
+         * Усі ID та CSS-класи перейменовані, але візуальний стиль ідентичний v1.
+         * Selenium не знайде елементи ні по ID ні по class — YOLOv8 відновить їх.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card-container { background: #ffffff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .card-container h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .field-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .field-control:focus { outline: none; border-color: #4a90e2; }
+        .check-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 13px; color: #555; }
+        .check-box { width: 16px; height: 16px; cursor: pointer; }
+        .submit-btn { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .submit-btn:hover { background: #357abd; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <h1>Sign In</h1>
+
+        <!--
+            СЦЕНАРІЙ 3: Перейменовані класи.
+            v1 → v3:
+              id="email"     → id="user-email"
+              id="password"  → id="user-password"
+              id="login-btn" → id="sign-in-btn"
+              class="form-input"  → class="field-control"
+              class="checkbox"    → class="check-box"
+              class="btn-primary" → class="submit-btn"
+        -->
+        <form id="sign-in-form" method="POST" action="">
+            <label for="user-email">Email</label>
+            <input type="email" id="user-email" name="user-email" class="field-control" placeholder="Enter your email" autocomplete="off" />
+
+            <label for="user-password">Password</label>
+            <input type="password" id="user-password" name="user-password" class="field-control" placeholder="Enter your password" />
+
+            <div class="check-row">
+                <input type="checkbox" id="user-remember" name="remember" class="check-box" />
+                <label for="user-remember" style="margin-bottom:0">Remember me</label>
+            </div>
+
+            <button type="submit" id="sign-in-btn" class="submit-btn">Log In</button>
+        </form>
+
+        <p class="version-badge">v3 — class mutation</p>
+    </div>
+</body>
+</html>

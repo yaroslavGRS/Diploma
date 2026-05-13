@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        /*
+         * СЦЕНАРІЙ 4 — Додаткові wrapper-div навколо елементів.
+         * Кожне поле обгорнуте в <div class="field-wrap">.
+         * Це поширена практика в компонентних фреймворках (React, Vue).
+         * document.elementFromPoint() повертає input всередині wrapper-а.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .login-card { background: #ffffff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .login-card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .field-wrap { margin-bottom: 18px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .form-input:focus { outline: none; border-color: #4a90e2; }
+        .remember-row { display: flex; align-items: center; gap: 8px; margin-bottom: 20px; font-size: 13px; color: #555; }
+        .checkbox { width: 16px; height: 16px; cursor: pointer; }
+        .btn-primary { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .btn-primary:hover { background: #357abd; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="login-card">
+        <h1>Sign In</h1>
+
+        <!--
+            СЦЕНАРІЙ 4: Wrapper-div навколо кожного поля.
+            Імітує React/Vue компоненти де input огорнуто в div.
+            v1 → v4:
+              id="email"     → id="wrap-email"
+              id="password"  → id="wrap-password"
+              id="login-btn" → id="wrap-btn"
+        -->
+        <form id="login-form" method="POST" action="">
+            <label for="wrap-email">Email</label>
+            <div class="field-wrap">
+                <input type="email" id="wrap-email" name="wrap-email" class="form-input" placeholder="Enter your email" autocomplete="off" />
+            </div>
+
+            <label for="wrap-password">Password</label>
+            <div class="field-wrap">
+                <input type="password" id="wrap-password" name="wrap-password" class="form-input" placeholder="Enter your password" />
+            </div>
+
+            <div class="remember-row">
+                <input type="checkbox" id="wrap-remember" name="remember" class="checkbox" />
+                <label for="wrap-remember" style="margin-bottom:0">Remember me</label>
+            </div>
+
+            <div class="field-wrap">
+                <button type="submit" id="wrap-btn" class="btn-primary">Log In</button>
+            </div>
+        </form>
+
+        <p class="version-badge">v4 — wrapper div mutation</p>
+    </div>
+</body>
+</html>
