@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <style>
+        /*
+         * VERSION 2 — Registration form, mutated DOM.
+         * Visually identical to v1, but all identifiers renamed:
+         *   id="reg-name"     → id="user-fullname"
+         *   id="reg-email"    → id="user-mail"
+         *   id="reg-password" → id="user-secret"
+         *   id="reg-btn"      → id="create-account-btn"
+         * Self-healing system must recover all 3 inputs and the button.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #fff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .input-ctrl { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .input-ctrl:focus { outline: none; border-color: #4a90e2; }
+        .action-btn { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .action-btn:hover { background: #357abd; }
+        .error-msg { color: #c0392b; font-size: 13px; margin-bottom: 14px; text-align: center; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Create Account</h1>
+
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="">
+            <label for="user-fullname">Full Name</label>
+            <input type="text" id="user-fullname" name="user-fullname" class="input-ctrl" placeholder="Enter your name" autocomplete="off" />
+
+            <label for="user-mail">Email</label>
+            <input type="email" id="user-mail" name="user-mail" class="input-ctrl" placeholder="Enter your email" autocomplete="off" />
+
+            <label for="user-secret">Password</label>
+            <input type="password" id="user-secret" name="user-secret" class="input-ctrl" placeholder="Create a password" />
+
+            <button type="submit" id="create-account-btn" class="action-btn">Register</button>
+        </form>
+
+        <p class="version-badge">v2 — refactored DOM</p>
+    </div>
+</body>
+</html>

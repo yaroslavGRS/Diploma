@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <style>
+        /*
+         * VERSION 1 — Registration form, stable DOM.
+         * Selectors used by Selenium tests:
+         *   By.ID "reg-name"     → full name input
+         *   By.ID "reg-email"    → email input
+         *   By.ID "reg-password" → password input
+         *   By.ID "reg-btn"      → submit button
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #fff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .form-input:focus { outline: none; border-color: #4a90e2; }
+        .btn-primary { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .btn-primary:hover { background: #357abd; }
+        .error-msg { color: #c0392b; font-size: 13px; margin-bottom: 14px; text-align: center; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Create Account</h1>
+
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST" action="">
+            <label for="reg-name">Full Name</label>
+            <input type="text" id="reg-name" name="reg-name" class="form-input" placeholder="Enter your name" autocomplete="off" />
+
+            <label for="reg-email">Email</label>
+            <input type="email" id="reg-email" name="reg-email" class="form-input" placeholder="Enter your email" autocomplete="off" />
+
+            <label for="reg-password">Password</label>
+            <input type="password" id="reg-password" name="reg-password" class="form-input" placeholder="Create a password" />
+
+            <button type="submit" id="reg-btn" class="btn-primary">Register</button>
+        </form>
+
+        <p class="version-badge">v1 — stable DOM</p>
+    </div>
+</body>
+</html>

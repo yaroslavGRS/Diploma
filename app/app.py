@@ -82,6 +82,34 @@ def login_v5():
     return render_template("v5/login.html", error=error)
 
 
+@app.route("/v1/register", methods=["GET", "POST"])
+def register_v1():
+    """v1 — registration form, stable DOM."""
+    error = None
+    if request.method == "POST":
+        name     = request.form.get("reg-name", "").strip()
+        email    = request.form.get("reg-email", "").strip()
+        password = request.form.get("reg-password", "")
+        if name and email and len(password) >= 4:
+            return redirect(url_for("success", version="v1-register"))
+        error = "Please fill in all fields (password min 4 chars)."
+    return render_template("v1/register.html", error=error)
+
+
+@app.route("/v2/register", methods=["GET", "POST"])
+def register_v2():
+    """v2 — registration form, mutated DOM (all IDs renamed)."""
+    error = None
+    if request.method == "POST":
+        name     = request.form.get("user-fullname", "").strip()
+        email    = request.form.get("user-mail", "").strip()
+        password = request.form.get("user-secret", "")
+        if name and email and len(password) >= 4:
+            return redirect(url_for("success", version="v2-register"))
+        error = "Please fill in all fields (password min 4 chars)."
+    return render_template("v2/register.html", error=error)
+
+
 @app.route("/success")
 def success():
     version = request.args.get("version", "unknown")

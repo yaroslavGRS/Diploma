@@ -44,9 +44,16 @@ CLASS_COLORS = {
 # (наприклад, два поля вводу — email і password).
 # Елементи сортуються зверху вниз за координатою Y.
 ELEMENT_MAP = {
-    'email':    ('input', 0),   # перше поле вводу зверху
-    'password': ('input', 1),   # друге поле вводу
-    'btn':      ('Button', 0),  # перша кнопка
+    # Login form
+    'email':        ('input', 0),   # перше поле вводу
+    'password':     ('input', 1),   # друге поле вводу
+    'btn':          ('Button', 0),  # перша кнопка
+
+    # Registration form (3 inputs: name, email, password)
+    'reg-name':     ('input', 0),   # перше поле — ім'я
+    'reg-email':    ('input', 1),   # друге поле — email
+    'reg-password': ('input', 2),   # третє поле — пароль
+    'reg-btn':      ('Button', 0),  # кнопка реєстрації
 }
 
 
