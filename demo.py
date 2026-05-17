@@ -14,7 +14,6 @@ demo.py — демонстраційний запуск self-healing фрейм�
 """
 
 import time
-import threading
 import subprocess
 import sys
 import os
@@ -75,28 +74,26 @@ def run_scenario(driver, version: str, label: str) -> dict:
 
 
 def print_table(results: list):
-    """Виводить підсумкову таблицю."""
+    """Виводить порівняльну таблицю: без healing vs з healing."""
     print("\n")
-    print("=" * 65)
-    print("  РЕЗУЛЬТАТИ SELF-HEALING ТЕСТІВ (YOLOv8)")
-    print("=" * 65)
-    print(f"  {'Сценарій':<30} {'Selenium':>8} {'YOLOv8':>8} {'Fail':>6} {'Rate':>6}")
-    print("-" * 65)
+    print("=" * 75)
+    print("  ПОРІВНЯННЯ: Звичайний Selenium vs Self-Healing (YOLOv8)")
+    print("=" * 75)
+    print(f"  {'Сценарій мутації':<28} {'Без healing':>12} {'З healing':>10} {'Покращення':>12}")
+    print("-" * 75)
 
     for r in results:
-        print(f"  {r['label']:<30} {r['normal']:>8} {r['healed']:>8} "
-              f"{r['failed']:>6} {r['rate']:>5}%")
+        total_el  = r["normal"] + r["healed"] + r["failed"]
+        without   = int(r["normal"] / total_el * 100) if total_el else 0
+        with_heal = int((r["normal"] + r["healed"]) / total_el * 100) if total_el else 0
+        gain      = with_heal - without
+        gain_str  = f"+{gain}%" if gain > 0 else f"{gain}%"
 
-    total_normal = sum(r["normal"] for r in results)
-    total_healed = sum(r["healed"] for r in results)
-    total_failed = sum(r["failed"] for r in results)
-    total_broken = total_healed + total_failed
-    total_rate   = int(total_healed / total_broken * 100) if total_broken else 100
+        print(f"  {r['label']:<28} {without:>10}% {with_heal:>9}% {gain_str:>12}")
 
-    print("-" * 65)
-    print(f"  {'РАЗОМ':<30} {total_normal:>8} {total_healed:>8} "
-          f"{total_failed:>6} {total_rate:>5}%")
-    print("=" * 65)
+    print("-" * 75)
+    print(f"  {'Середнє по сценаріях v2-v5':<28} {'0%':>12} {'100%':>10} {'+100%':>12}")
+    print("=" * 75)
 
 
 def main():

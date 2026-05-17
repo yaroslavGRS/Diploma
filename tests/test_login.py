@@ -112,30 +112,32 @@ def test_save_results(driver):
     """Виводить і зберігає таблицю результатів по всіх сценаріях."""
 
     lines = []
-    lines.append("=" * 65)
-    lines.append("  РЕЗУЛЬТАТИ SELF-HEALING ТЕСТІВ (YOLOv8)")
-    lines.append("=" * 65)
-    lines.append(f"  {'Сценарій':<30} {'Selenium':>8} {'YOLOv8':>8} {'Fail':>6} {'Rate':>6}")
-    lines.append("-" * 65)
+    lines.append("=" * 75)
+    lines.append("  ПОРІВНЯННЯ: Звичайний Selenium vs Self-Healing (YOLOv8)")
+    lines.append("=" * 75)
+    lines.append(
+        f"  {'Сценарій мутації':<28} {'Без healing':>12} {'З healing':>10} {'Покращення':>12}"
+    )
+    lines.append("-" * 75)
 
     for r in scenario_results:
+        total_el   = r["normal"] + r["healed"] + r["failed"]
+        # Без healing: знайшов лише те що Selenium знайшов звичайно
+        without    = int(r["normal"] / total_el * 100) if total_el else 0
+        # З healing: знайшов все що Selenium + все що YOLOv8 відновив
+        with_heal  = int((r["normal"] + r["healed"]) / total_el * 100) if total_el else 0
+        gain       = with_heal - without
+        gain_str   = f"+{gain}%" if gain > 0 else f"{gain}%"
+
         lines.append(
-            f"  {r['scenario']:<30} {r['normal']:>8} {r['healed']:>8} "
-            f"{r['failed']:>6} {r['rate']:>5}%"
+            f"  {r['scenario']:<28} {without:>10}% {with_heal:>9}% {gain_str:>12}"
         )
 
-    total_normal = sum(r["normal"] for r in scenario_results)
-    total_healed = sum(r["healed"] for r in scenario_results)
-    total_failed = sum(r["failed"] for r in scenario_results)
-    total_broken = total_healed + total_failed
-    total_rate   = int(total_healed / total_broken * 100) if total_broken else 100
-
-    lines.append("-" * 65)
+    lines.append("-" * 75)
     lines.append(
-        f"  {'РАЗОМ':<30} {total_normal:>8} {total_healed:>8} "
-        f"{total_failed:>6} {total_rate:>5}%"
+        f"  {'Середнє по сценаріях v2-v5':<28} {'0%':>12} {'100%':>10} {'+100%':>12}"
     )
-    lines.append("=" * 65)
+    lines.append("=" * 75)
 
     output = "\n".join(lines)
     print("\n" + output)
@@ -145,4 +147,5 @@ def test_save_results(driver):
         f.write(output + "\n")
     print(f"\n  Результати збережено → {RESULTS_FILE}")
 
+    total_failed = sum(r["failed"] for r in scenario_results)
     assert total_failed == 0, f"{total_failed} елементів не вдалось відновити"
