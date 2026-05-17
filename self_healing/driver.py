@@ -17,6 +17,7 @@ Self-healing Selenium driver з YOLOv8.
 """
 
 import os
+import time
 import numpy as np
 import cv2
 from ultralytics import YOLO
@@ -27,6 +28,16 @@ from selenium.common.exceptions import NoSuchElementException
 
 # Шлях до натренованої моделі YOLOv8
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'best.pt')
+
+# Папка для збереження візуалізацій bounding boxes
+VISUALS_DIR = os.path.join(os.path.dirname(__file__), '..', 'results', 'visuals')
+
+# Кольори для кожного класу (BGR формат для OpenCV)
+CLASS_COLORS = {
+    'Button':   (0, 200, 0),    # green
+    'input':    (255, 100, 0),  # blue
+    'Dropdown': (0, 165, 255),  # orange
+}
 
 # Відповідність між логічним іменем елемента і класом YOLO + індексом.
 # Індекс потрібен коли на сторінці кілька елементів одного типу
@@ -60,6 +71,11 @@ class SelfHealingDriver:
         # Статистика для таблиці результатів.
         self.stats = {'normal': 0, 'healed': 0, 'failed': 0}
 
+        # Час виконання: скільки секунд витрачено на звичайний пошук vs YOLOv8
+        self.timing = {'normal': 0.0, 'yolo': 0.0}
+
+        os.makedirs(VISUALS_DIR, exist_ok=True)
+
     # ------------------------------------------------------------------
     # Публічний інтерфейс
     # ------------------------------------------------------------------
@@ -89,14 +105,19 @@ class SelfHealingDriver:
         if element_id is None:
             element_id = value
 
+        t0 = time.perf_counter()
         try:
             element = self._driver.find_element(by, value)
+            self.timing['normal'] += time.perf_counter() - t0
             self.stats['normal'] += 1
             return element
 
         except NoSuchElementException:
+            self.timing['normal'] += time.perf_counter() - t0
             print(f"  [self-healing] '{value}' не знайдено — запускаємо YOLOv8")
+            t1 = time.perf_counter()
             healed = self._yolo_find(element_id)
+            self.timing['yolo'] += time.perf_counter() - t1
             if healed:
                 self.stats['healed'] += 1
                 return healed
@@ -113,6 +134,71 @@ class SelfHealingDriver:
         """Знайти елемент і клікнути."""
         el = self.find_element(by, value, element_id=element_id)
         el.click()
+
+    def save_detection_visual(self, filename: str, title: str = ""):
+        """
+        Робить скріншот поточної сторінки, запускає YOLOv8 на ньому
+        і зберігає зображення з намальованими bounding boxes навколо
+        всіх знайдених елементів.
+
+        Використовується для генерації ілюстрацій до дипломної роботи.
+        Зберігає файл у results/visuals/<filename>.png
+        """
+        png_bytes  = self._driver.get_screenshot_as_png()
+        screenshot = cv2.imdecode(
+            np.frombuffer(png_bytes, np.uint8), cv2.IMREAD_COLOR
+        )
+
+        results = self._model(screenshot, conf=0.3, verbose=False)
+        detected = 0
+
+        # Малюємо bounding box і підпис для кожного знайденого елемента
+        for box in results[0].boxes:
+            class_name = self._model.names[int(box.cls)]
+            confidence = float(box.conf)
+            x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
+            color = CLASS_COLORS.get(class_name, (200, 200, 200))
+
+            # Рамка навколо елемента (товщина 2px)
+            cv2.rectangle(screenshot, (x1, y1), (x2, y2), color, 2)
+
+            # Підпис з назвою класу і впевненістю
+            label = f"{class_name} {confidence:.2f}"
+            (lw, lh), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.55, 1)
+            cv2.rectangle(screenshot, (x1, y1 - lh - 6), (x1 + lw + 4, y1), color, -1)
+            cv2.putText(
+                screenshot, label, (x1 + 2, y1 - 4),
+                cv2.FONT_HERSHEY_SIMPLEX, 0.55, (255, 255, 255), 1
+            )
+            detected += 1
+
+        # Додаємо інформаційну панель знизу зображення
+        h, w = screenshot.shape[:2]
+        panel = np.zeros((60, w, 3), dtype=np.uint8)
+        panel[:] = (40, 40, 40)  # темно-сірий фон
+
+        info_title = title if title else filename
+        info_text  = f"YOLOv8 detected: {detected} elements"
+
+        cv2.putText(panel, info_title, (12, 22),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.65, (255, 255, 255), 1)
+        cv2.putText(panel, info_text, (12, 48),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.55, (100, 220, 100), 1)
+
+        # Легенда кольорів праворуч
+        legend_x = w - 280
+        for i, (cls, color) in enumerate(CLASS_COLORS.items()):
+            lx = legend_x + i * 90
+            cv2.rectangle(panel, (lx, 18), (lx + 14, 32), color, -1)
+            cv2.putText(panel, cls, (lx + 18, 30),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.45, (200, 200, 200), 1)
+
+        screenshot = np.vstack([screenshot, panel])
+
+        path = os.path.join(VISUALS_DIR, f"{filename}.png")
+        cv2.imwrite(path, screenshot)
+        print(f"  [visual] збережено → {path}")
+        return path
 
     # ------------------------------------------------------------------
     # Візуальне відновлення через YOLOv8
