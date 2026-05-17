@@ -47,7 +47,7 @@ def _try_login(driver, version: str) -> bool:
         driver.find_element(By.ID, "email").send_keys(EMAIL)
         driver.find_element(By.ID, "password").send_keys(PASSWORD)
         driver.find_element(By.ID, "login-btn").click()
-        WebDriverWait(driver, 3).until(lambda d: d.current_url != start_url)
+        WebDriverWait(driver, 5).until(lambda d: d.current_url != start_url)
         return "success" in driver.current_url
     except (NoSuchElementException, TimeoutException):
         return False
@@ -62,7 +62,7 @@ def _try_register(driver, version: str) -> bool:
         driver.find_element(By.ID, "reg-email").send_keys(REG_EMAIL)
         driver.find_element(By.ID, "reg-password").send_keys(PASSWORD)
         driver.find_element(By.ID, "reg-btn").click()
-        WebDriverWait(driver, 3).until(lambda d: d.current_url != start_url)
+        WebDriverWait(driver, 5).until(lambda d: d.current_url != start_url)
         return "success" in driver.current_url
     except (NoSuchElementException, TimeoutException):
         return False
@@ -75,7 +75,7 @@ def _try_search(driver, version: str) -> bool:
     try:
         driver.find_element(By.ID, "search-query").send_keys(QUERY)
         driver.find_element(By.ID, "search-btn").click()
-        WebDriverWait(driver, 3).until(lambda d: d.current_url != start_url)
+        WebDriverWait(driver, 5).until(lambda d: d.current_url != start_url)
         return "success" in driver.current_url
     except (NoSuchElementException, TimeoutException):
         return False

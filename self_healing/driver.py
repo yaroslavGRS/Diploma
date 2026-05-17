@@ -55,10 +55,11 @@ ELEMENT_MAP = {
     'reg-password': ('input', 2),   # третє поле — пароль
     'reg-btn':      ('Button', 0),  # кнопка реєстрації
 
-    # Search form (input + dropdown + button)
-    'search-query':    ('input',    0),  # поле пошукового запиту
-    'search-category': ('Dropdown', 0),  # випадаючий список категорій
-    'search-btn':      ('Button',   0),  # кнопка пошуку
+    # Search form (input + button)
+    # Note: native HTML <select> is not reliably detected as Dropdown by the
+    # current model (trained on custom UI components). Only input and button are healed.
+    'search-query': ('input',  0),  # поле пошукового запиту
+    'search-btn':   ('Button', 0),  # кнопка пошуку
 }
 
 

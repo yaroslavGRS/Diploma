@@ -15,5 +15,8 @@ numpy>=1.26.0
 pytest>=8.0.0
 pytest-html>=4.1.0
 
+# Plotting — charts and architecture diagrams
+matplotlib>=3.7.0
+
 # ChromeDriver auto-management
 webdriver-manager>=4.0.0

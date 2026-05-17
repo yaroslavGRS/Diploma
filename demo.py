@@ -15,6 +15,7 @@ No manual setup needed — just: python demo.py
 """
 
 import time
+import socket
 import subprocess
 import sys
 import os
@@ -60,7 +61,13 @@ def start_flask():
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
-    time.sleep(2)
+    # Wait until port 5000 is actually accepting connections (max 10s)
+    for _ in range(20):
+        try:
+            with socket.create_connection(("localhost", 5000), timeout=0.5):
+                return
+        except OSError:
+            time.sleep(0.5)
 
 
 def run_login(driver, version: str, label: str) -> dict:
