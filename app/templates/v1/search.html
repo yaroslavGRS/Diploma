@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+    <style>
+        /*
+         * VERSION 1 — Search form, stable DOM.
+         * Selenium tests:
+         *   By.ID "search-query"    → text input
+         *   By.ID "search-category" → category dropdown (select)
+         *   By.ID "search-btn"      → submit button
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: #fff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 420px; }
+        .card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .form-input { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .form-input:focus { outline: none; border-color: #4a90e2; }
+        select.form-input { background: #fff; cursor: pointer; }
+        .btn-primary { width: 100%; padding: 11px; background: #27ae60; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .btn-primary:hover { background: #219a52; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+        .result-msg { margin-top: 18px; padding: 12px; background: #eafaf1; border-radius: 5px; font-size: 14px; color: #27ae60; text-align: center; display: none; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Product Search</h1>
+
+        <form method="POST" action="">
+            <label for="search-query">Search query</label>
+            <input type="text" id="search-query" name="search-query" class="form-input" placeholder="Enter product name..." autocomplete="off" />
+
+            <label for="search-category">Category</label>
+            <select id="search-category" name="search-category" class="form-input">
+                <option value="">— Select category —</option>
+                <option value="electronics">Electronics</option>
+                <option value="clothing">Clothing</option>
+                <option value="books">Books</option>
+                <option value="sports">Sports</option>
+            </select>
+
+            <button type="submit" id="search-btn" class="btn-primary">Search</button>
+        </form>
+
+        <p class="version-badge">v1 — stable DOM</p>
+    </div>
+</body>
+</html>

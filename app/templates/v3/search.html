@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Search</title>
+    <style>
+        /*
+         * VERSION 3 — Search form, renamed IDs + CSS classes + wrapper divs.
+         * Combined mutation: all three change types at once.
+         * YOLOv8 recovers all three elements (input, dropdown, button) visually.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .search-panel { background: #fff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 420px; }
+        .search-panel h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .field-wrap { margin-bottom: 18px; }
+        .txt-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .txt-control:focus { outline: none; border-color: #4a90e2; }
+        select.txt-control { background: #fff; cursor: pointer; }
+        .go-btn { width: 100%; padding: 11px; background: #27ae60; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .go-btn:hover { background: #219a52; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="search-panel">
+        <h1>Product Search</h1>
+
+        <!--
+            v1 → v3 mutations (IDs + classes + wrappers):
+              id="search-query"    → id="txt-query"    (in .field-wrap)
+              id="search-category" → id="ddl-category" (in .field-wrap)
+              id="search-btn"      → id="run-search"   (in .field-wrap)
+              class="form-input"   → class="txt-control"
+              class="btn-primary"  → class="go-btn"
+        -->
+        <form method="POST" action="">
+            <label for="txt-query">Search query</label>
+            <div class="field-wrap">
+                <input type="text" id="txt-query" name="search-query" class="txt-control" placeholder="Enter product name..." autocomplete="off" />
+            </div>
+
+            <label for="ddl-category">Category</label>
+            <div class="field-wrap">
+                <select id="ddl-category" name="search-category" class="txt-control">
+                    <option value="">— Select category —</option>
+                    <option value="electronics">Electronics</option>
+                    <option value="clothing">Clothing</option>
+                    <option value="books">Books</option>
+                    <option value="sports">Sports</option>
+                </select>
+            </div>
+
+            <div class="field-wrap">
+                <button type="submit" id="run-search" class="go-btn">Search</button>
+            </div>
+        </form>
+
+        <p class="version-badge">v3 — combined mutation</p>
+    </div>
+</body>
+</html>

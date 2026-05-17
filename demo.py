@@ -7,8 +7,9 @@ Run:
 What happens:
     1. Flask server starts automatically in the background.
     2. SelfHealingDriver runs login tests on 5 DOM mutation scenarios.
-    3. SelfHealingDriver runs registration tests on v1 and v2.
-    4. Results table is printed to console.
+    3. SelfHealingDriver runs registration tests on v1–v4.
+    4. SelfHealingDriver runs search form tests on v1–v3 (tests Dropdown class).
+    5. Results table is printed to console with overall recovery rate.
 
 No manual setup needed — just: python demo.py
 """
@@ -29,6 +30,7 @@ BASE     = "http://localhost:5000"
 EMAIL    = "admin@test.com"
 PASSWORD = "password123"
 NAME     = "Test User"
+QUERY    = "laptop"
 
 LOGIN_SCENARIOS = [
     ("v1", "Login  v1 — stable DOM       "),
@@ -41,6 +43,14 @@ LOGIN_SCENARIOS = [
 REGISTER_SCENARIOS = [
     ("v1", "Register v1 — stable DOM     "),
     ("v2", "Register v2 — renamed IDs    "),
+    ("v3", "Register v3 — renamed classes"),
+    ("v4", "Register v4 — wrapper divs   "),
+]
+
+SEARCH_SCENARIOS = [
+    ("v1", "Search   v1 — stable DOM     "),
+    ("v2", "Search   v2 — renamed IDs    "),
+    ("v3", "Search   v3 — combined mutat."),
 ]
 
 
@@ -79,6 +89,21 @@ def run_register(driver, version: str, label: str) -> dict:
     driver.click(       By.ID, "reg-btn",                element_id="reg-btn")
 
     WebDriverWait(driver._driver, 5).until(EC.url_contains("success"))
+    return _record(driver, label)
+
+
+def run_search(driver, version: str, label: str) -> dict:
+    """Runs a search scenario and returns stats."""
+    driver.stats  = {"normal": 0, "healed": 0, "failed": 0}
+    driver.timing = {"normal": 0.0, "yolo": 0.0}
+    driver.get(f"{BASE}/{version}/search")
+
+    driver.send_keys_to(By.ID, "search-query", QUERY, element_id="search-query")
+    driver.click(By.ID, "search-btn", element_id="search-btn")
+
+    WebDriverWait(driver._driver, 5).until(
+        lambda d: "search-success" in d.current_url or "success" in d.current_url
+    )
     return _record(driver, label)
 
 
@@ -140,6 +165,10 @@ def main():
     print("\n  --- REGISTRATION FORM SCENARIOS ---\n")
     for version, label in REGISTER_SCENARIOS:
         results.append(run_register(driver, version, label))
+
+    print("\n  --- SEARCH FORM SCENARIOS (with Dropdown) ---\n")
+    for version, label in SEARCH_SCENARIOS:
+        results.append(run_search(driver, version, label))
 
     driver.quit()
     print_table(results)

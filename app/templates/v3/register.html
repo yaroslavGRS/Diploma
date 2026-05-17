@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register</title>
+    <style>
+        /*
+         * VERSION 3 — Registration form, renamed IDs + CSS classes.
+         * Selenium tests use old IDs (reg-name, reg-email, etc.) — all missing.
+         * Visual appearance is identical to v1 — YOLOv8 recovers all elements.
+         */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: Arial, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .account-card { background: #fff; padding: 40px 36px; border-radius: 8px; box-shadow: 0 2px 12px rgba(0,0,0,0.15); width: 380px; }
+        .account-card h1 { font-size: 22px; margin-bottom: 28px; color: #1a1a2e; text-align: center; }
+        label { display: block; font-size: 13px; color: #555; margin-bottom: 5px; }
+        .field-control { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; margin-bottom: 18px; }
+        .field-control:focus { outline: none; border-color: #4a90e2; }
+        .action-btn { width: 100%; padding: 11px; background: #4a90e2; color: #fff; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+        .action-btn:hover { background: #357abd; }
+        .error-msg { color: #c0392b; font-size: 13px; margin-bottom: 14px; text-align: center; }
+        .version-badge { text-align: center; margin-top: 20px; font-size: 11px; color: #bbb; }
+    </style>
+</head>
+<body>
+    <div class="account-card">
+        <h1>Create Account</h1>
+
+        {% if error %}
+        <p class="error-msg">{{ error }}</p>
+        {% endif %}
+
+        <!--
+            v1 → v3 mutations:
+              id="reg-name"     → id="full-name-field"
+              id="reg-email"    → id="email-field"
+              id="reg-password" → id="pwd-field"
+              id="reg-btn"      → id="submit-field"
+              class="form-input"  → class="field-control"
+              class="btn-primary" → class="action-btn"
+        -->
+        <form method="POST" action="">
+            <label for="full-name-field">Full Name</label>
+            <input type="text" id="full-name-field" name="reg-name" class="field-control" placeholder="Enter your name" autocomplete="off" />
+
+            <label for="email-field">Email</label>
+            <input type="email" id="email-field" name="reg-email" class="field-control" placeholder="Enter your email" autocomplete="off" />
+
+            <label for="pwd-field">Password</label>
+            <input type="password" id="pwd-field" name="reg-password" class="field-control" placeholder="Create a password" />
+
+            <button type="submit" id="submit-field" class="action-btn">Register</button>
+        </form>
+
+        <p class="version-badge">v3 — class mutation</p>
+    </div>
+</body>
+</html>

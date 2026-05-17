@@ -54,6 +54,11 @@ ELEMENT_MAP = {
     'reg-email':    ('input', 1),   # друге поле — email
     'reg-password': ('input', 2),   # третє поле — пароль
     'reg-btn':      ('Button', 0),  # кнопка реєстрації
+
+    # Search form (input + dropdown + button)
+    'search-query':    ('input',    0),  # поле пошукового запиту
+    'search-category': ('Dropdown', 0),  # випадаючий список категорій
+    'search-btn':      ('Button',   0),  # кнопка пошуку
 }
 
 
